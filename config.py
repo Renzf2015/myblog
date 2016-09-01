@@ -40,8 +40,9 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
+    @classmethod
     def init_app(cls, app):
         Config.init_app(app)
 
@@ -62,6 +63,7 @@ class ProductionConfig(Config):
         app.logger.addHandler(mail_handler)
 
 class HerokuConfig(ProductionConfig):
+    
     @classmethod
     def init_app(cls, app):
         ProductionConfig.init_app(app)
