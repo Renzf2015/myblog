@@ -22,3 +22,4 @@ blinker==1.4
 html5lib==0.9999999
 itsdangerous==0.24
 six==1.10.0
+gunicorn==
