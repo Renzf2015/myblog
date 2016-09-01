@@ -42,7 +42,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-        def init_app(cls, app):
+    def init_app(cls, app):
         Config.init_app(app)
 
         #把错误通过电子邮件发送给管理员
