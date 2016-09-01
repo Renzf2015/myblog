@@ -50,7 +50,7 @@ class ProductionConfig(Config):
         import logging
         from logging.handlers import SMTPHandler
         credentials = None
-        if getattr(cls, 'MAIL_USERNAME', None)is not NOne:
+        if getattr(cls, 'MAIL_USERNAME', None)is not Nne:
             credintials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
             if getattr(cls, 'MAIL_USE_TLS', None):
                 secure = ()
