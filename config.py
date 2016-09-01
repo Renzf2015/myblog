@@ -6,14 +6,15 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
-    MAIL_SERVER = 'smtp.googlemail.com'
-    MAIL_PORT = 587
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    MAIL_SERVER = 'smtp.163.com'
+    MAIL_PORT = 465
     MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
-    FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
-    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    MAIL_USERNAME = '18218361885@163.com'
+    MAIL_PASSWORD = 'qwer1234'
+    FLASKY_MAIL_SUBJECT_PREFIX = 'Renz－flasky'
+    FLASKY_MAIL_SENDER = '18218361885@qq.com　'
+    FLASKY_ADMIN = '328713040@qq.com'
     FLASKY_POSTS_PER_PAGE = 20
     FLASKY_FOLLOWERS_PER_PAGE = 50
     FLASKY_COMMENTS_PER_PAGE = 30
@@ -40,12 +41,43 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+        def init_app(cls, app):
+        Config.init_app(app)
+
+        #把错误通过电子邮件发送给管理员
+        import logging
+        from logging.handlers import SMTPHandler
+        credentials = None
+        if getattr(cls, 'MAIL_USERNAME', None)is not NOne:
+            credintials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
+            if getattr(cls, 'MAIL_USE_TLS', None):
+                secure = ()
+        mail_handler = STMPHandler(mailhost = (cls.MAIL_SERVER,cls.MAIL_PORT),
+            fromaddr =cls.FLASKY_MAIL_SENDER,
+            toaddrs = [cls.FLASK_ADMIN],
+            subject = cls.FLASKY_MAIL_SUBJECT_PREFIX + 'App Error',
+            credentials = credentials, secure = secure)
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
+
+class HerokuConfig(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+
+        #输出到stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
 
 
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
+    'heroku': HerokuConfig,
+    
     'default': DevelopmentConfig
 }
