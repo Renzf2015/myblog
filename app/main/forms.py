@@ -51,7 +51,8 @@ class EditProfileAdminForm(Form):
 
 
 class PostForm(Form):
-    body = PageDownField("想说些什么？", validators=[Required()])
+    title = StringField('标题', validators=[Required(), Length(1, 64)])
+    body = PageDownField("正文", validators=[Required()])
     submit = SubmitField('提交')
 
 
