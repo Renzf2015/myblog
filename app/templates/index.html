@@ -2,22 +2,34 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}博客{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
-</div>
-<div>
-    {% if current_user.can(Permission.WRITE_ARTICLES) %}
-    {{ wtf.quick_form(form) }}
-    {% endif %}
-</div>
+<div id="myCarousel" class="carousel slide">
+  <!-- 轮播（Carousel）指标 -->
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+  </ol>   
+  <!-- 轮播（Carousel）项目 -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="http://v2.bootcss.com/assets/img/examples/slide-01.jpg" alt="First slide">
+    </div>
+    <div class="item">
+      <img src="http://v2.bootcss.com/assets/img/examples/slide-02.jpg" alt="Second slide">
+    </div>
+    <div class="item">
+      <img src="http://v2.bootcss.com/assets/img/examples/slide-03.jpg" alt="Third slide">
+    </div>
+  </div>
+</div> 
 <div class="post-tabs">
     <ul class="nav nav-tabs">
-        <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">All</a></li>
+        <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">全部文章</a></li>
         {% if current_user.is_authenticated %}
-        <li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li>
+        <li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">关注好友文章</a></li>
         {% endif %}
     </ul>
     {% include '_posts.html' %}

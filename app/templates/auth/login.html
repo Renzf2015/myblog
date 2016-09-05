@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Flasky - Login{% endblock %}
+{% block title %}登录{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Login</h1>
+    <h1 class="text-center">登录</h1>
 </div>
+<div class="row">
+<div class="span4"></div>
 <div class="col-md-4">
-    {{ wtf.quick_form(form) }}
-    <br>
-    <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>
-    <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+    {{ wtf.quick_form(form)}}
+    <a class = "btn" href="{{ url_for('auth.password_reset_request') }}">重置密码</a>
+    <a class = "btn" href="{{ url_for('auth.register') }}">新用户注册</a>
 </div>
 {% endblock %}
