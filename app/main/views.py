@@ -145,10 +145,12 @@ def edit(id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        post.title = form.title.data
         post.body = form.body.data
         db.session.add(post)
         flash('The post has been updated.')
         return redirect(url_for('.post', id=post.id))
+    form.title.data = post.title
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
@@ -294,4 +296,17 @@ def write():
     posts = pagination.items
     return render_template('write.html', form=form, posts=posts,
                            show_followed=show_followed, pagination=pagination)
+
+
+@main.route('/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete(id):
+    post = Post.query.get_or_404(id)
+    if current_user != post.author and \
+            not current_user.can(Permission.ADMINISTER):
+        abort(403)
+    db.session.delete(post)
+    return redirect(url_for('.index'))
+
+
 
